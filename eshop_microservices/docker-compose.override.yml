@@ -1,0 +1,10 @@
+services:
+  catalogdb:
+    environment:
+      - POSTGRES_DB=CatalogDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Finn@1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql/data/

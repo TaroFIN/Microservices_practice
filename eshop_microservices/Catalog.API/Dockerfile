@@ -1,0 +1,31 @@
+# è«‹å???https://aka.ms/customizecontainer äº†è§£å¦‚ä??ªè??¨ç??µéŒ¯å®¹å™¨ï¼Œä»¥??Visual Studio å¦‚ä?ä½¿ç”¨æ­?Dockerfile ä¾†ç?å»ºæ‚¨?„æ??ï?ä»¥å?å¿«åµ?¯é€Ÿåº¦??
+
+# æ­¤é?æ®µç”¨?¼ä»¥å¿«é€Ÿæ¨¡å¼å? VS ?·è???(?µéŒ¯è¨­å??„é?è¨­å€?
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+
+# æ­¤é?æ®µæ˜¯?¨ä?çµ„å»º?å?å°ˆæ?
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["Catalog.API/Catalog.API.csproj", "Catalog.API/"]
+COPY ["BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "BuildingBlocks/BuildingBlocks/"]
+RUN dotnet restore "./Catalog.API/Catalog.API.csproj"
+COPY . .
+WORKDIR "/src/Catalog.API"
+RUN dotnet build "./Catalog.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# æ­¤é?æ®µå¯?¨ä??¼ä?è¦è?è£½åˆ°?€çµ‚é?æ®µç??å?å°ˆæ?
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Catalog.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# æ­¤é?æ®µç”¨?¼ç??¢ç’°å¢ƒï??–ä»¥ä¸€?¬æ¨¡å¼å? VS ?·è???(?ªä½¿?¨åµ?¯è¨­å®šæ??„é?è¨­å€?
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Catalog.API.dll"]
