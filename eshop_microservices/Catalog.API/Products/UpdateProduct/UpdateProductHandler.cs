@@ -32,7 +32,7 @@ internal class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProd
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
         if (product is null)
         {
-            return new UpdateProductResult(false, "Product not found");
+            throw new ProductNotFoundException(command.Id);
         }
         product.Name = command.Name;
         product.Description = command.Description;
