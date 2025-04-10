@@ -20,7 +20,7 @@ public class CacheBasketRepository(IBasketRepository repository, IDistributedCac
     public async Task<ShoppingCart> StoreBasket(ShoppingCart cart, CancellationToken cancellationToken = default)
     {
         await repository.StoreBasket(cart, cancellationToken);
-        await cache.SetStringAsync(cart.UserName, JsonSerializer.Serialize(cart));
+        await cache.SetStringAsync(cart.UserName, JsonSerializer.Serialize(cart), cancellationToken);
         return cart;
     }
 
@@ -31,7 +31,5 @@ public class CacheBasketRepository(IBasketRepository repository, IDistributedCac
 
         return true;
     }
-
-    
 }
 
