@@ -15,7 +15,7 @@ public class StoreBasketEndpoints : ICarterModule
         })
         .WithName("CreateBasket")
         .Produces<StoreBasketResponse>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithTags("Create Basket");
     }
 }

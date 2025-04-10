@@ -22,6 +22,8 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
             _ => ("An error occurred while processing your request.", "Error", StatusCodes.Status500InternalServerError)
         };
 
+        httpContext.Response.StatusCode = details.StatusCode;  // Set the status code, or will get 500 by default
+
         var problemDetails = new ProblemDetails
         {
             Title = details.Title,

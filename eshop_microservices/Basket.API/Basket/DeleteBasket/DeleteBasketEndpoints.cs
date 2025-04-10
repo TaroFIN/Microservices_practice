@@ -15,8 +15,8 @@ public class DeleteBasketEndpoints : ICarterModule
         })
         .WithName("DeleteBasket")
         .Produces<DeleteBasketResponse>(StatusCodes.Status200OK)
-        .Produces<DeleteBasketResponse>(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .WithTags("Basket");
     }
 }
