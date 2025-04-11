@@ -19,7 +19,15 @@ services:
       context: .
       dockerfile: Basket.API/Dockerfile
 
+
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    build:
+      context: .
+      dockerfile: Discount.gRPC/Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
+
 
