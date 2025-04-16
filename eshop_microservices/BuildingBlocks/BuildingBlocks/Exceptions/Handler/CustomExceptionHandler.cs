@@ -18,8 +18,9 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
             InternalServerException => (exception.Message, exception.GetType().Name, StatusCodes.Status500InternalServerError),
             ValidationException => (exception.Message, exception.GetType().Name, StatusCodes.Status400BadRequest),
             BadRequestException => (exception.Message, exception.GetType().Name, StatusCodes.Status400BadRequest),
+            BadHttpRequestException => (exception.Message, exception.GetType().Name, StatusCodes.Status400BadRequest),  // Guid if not valid
             NotFoundException => (exception.Message, exception.GetType().Name, StatusCodes.Status404NotFound),
-            _ => ("An error occurred while processing your request.", "Error", StatusCodes.Status500InternalServerError)
+            _ => (exception.Message, exception.GetType().Name, StatusCodes.Status500InternalServerError)
         };
 
         httpContext.Response.StatusCode = details.StatusCode;  // Set the status code, or will get 500 by default

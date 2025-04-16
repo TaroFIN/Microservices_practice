@@ -1,7 +1,8 @@
-﻿namespace Catalog.API.Products.GetProductById;
+﻿using BuildingBlocks.Exceptions;
+
+namespace Catalog.API.Products.GetProductById;
 
 public record GetProductByIdQuery(Guid id) : IQuery<GetProductByIdResult>;
-
 public record GetProductByIdResult(Product Product);
 
 internal class GetProductByIdQueryHandler(IDocumentSession session)
@@ -9,6 +10,8 @@ internal class GetProductByIdQueryHandler(IDocumentSession session)
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
+        
+
         var product = await session.LoadAsync<Product>(query.id, cancellationToken);
 
         if (product is null)
